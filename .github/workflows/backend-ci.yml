@@ -49,18 +49,6 @@ jobs:
       env:
         PYTHONPATH: ${{ github.workspace }}/backend
         ENVIRONMENT: test
-        DEBUG: true
-        LOG_LEVEL: DEBUG
-        APP_NAME: MoneyPilot-Test
-        VERSION: 0.1.0-test
-        API_PREFIX: /api/v1
-        CORS_ORIGINS: '["http://localhost:3000"]'
-        LLM_API_KEY: test-api-key
-        LLM_API_BASE_URL: https://api.openai.com/v1
-        LLM_MODEL_NAME: gpt-4
-        LLM_TIMEOUT_SECONDS: 600
-        SECRET_KEY: test-secret-key-for-ci
-        ACCESS_TOKEN_EXPIRE_MINUTES: 30
     
     - name: Upload coverage reports
       uses: actions/upload-artifact@v4
