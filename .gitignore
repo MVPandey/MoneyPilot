@@ -39,8 +39,12 @@ __pycache__/
 .venv
 .ruff_cache/
 *.log
-
+*.coverage
+*.coverage.*
 # ai tools
 .claude/
 .cursorrules/
 .mcp.json
+
+# utility scripts
+backend/remove_comments.py

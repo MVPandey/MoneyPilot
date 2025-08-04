@@ -12,17 +12,14 @@ from app.api import health
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Handle application startup and shutdown events."""
-    # Startup
     logger.info("Starting MoneyPilot application", extra={"version": app_settings.VERSION})
     logger.info("Configuration loaded", extra=app_settings.get_feature_summary())
     
     yield
     
-    # Shutdown
     logger.info("Shutting down MoneyPilot application")
 
 
-# Create FastAPI app
 app = FastAPI(
     title=app_settings.APP_NAME,
     version=app_settings.VERSION,
@@ -33,7 +30,6 @@ app = FastAPI(
     openapi_url=f"{app_settings.API_PREFIX}/openapi.json",
 )
 
-# Configure CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=app_settings.CORS_ORIGINS,
@@ -42,7 +38,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers
 app.include_router(health.router, prefix=app_settings.API_PREFIX, tags=["health"])
 
 

@@ -74,26 +74,22 @@ class PydanticAIService(Generic[T]):
             api_key: API key (defaults to config/env)
             tools: List of tools available to the agent
         """
-        # Get configuration with environment variable support
         self.model_name = model_name or app_settings.LLM_MODEL_NAME
         self.base_url = base_url or os.getenv(
             "LLM_API_BASE_URL", app_settings.LLM_API_BASE_URL
         )
         self.api_key = api_key or os.getenv("LLM_API_KEY", app_settings.LLM_API_KEY)
 
-        # Create OpenAI provider for any OpenAI-compatible endpoint
         provider = OpenAIProvider(
             base_url=self.base_url,
             api_key=self.api_key,
         )
 
-        # Create the model
         self.model = OpenAIModel(
             model_name=self.model_name,
             provider=provider,
         )
 
-        # Store configuration for agent creation
         self.system_prompt = system_prompt
         self.output_type = output_type
         self.tools = tools or []
@@ -131,7 +127,6 @@ class PydanticAIService(Generic[T]):
             output_type=output_type or self.output_type,
         )
 
-        # Register tools
         tools_to_register = tools if tools is not None else self.tools
         for tool in tools_to_register:
             agent.tool(tool)
@@ -156,7 +151,6 @@ class PydanticAIService(Generic[T]):
             AgentException: If agent execution fails
         """
         try:
-            # Create a fresh agent for this request
             agent = self.create_agent()
             result = await agent.run(prompt, deps=context, **kwargs)
 
@@ -199,7 +193,6 @@ class PydanticAIService(Generic[T]):
             AgentException: If agent execution fails
         """
         try:
-            # Create a fresh agent for this request
             agent = self.create_agent()
             async with agent.run_stream(
                 prompt, deps=context, **kwargs
@@ -302,10 +295,8 @@ class SimpleAgent(PydanticAIService[T]):
         Returns:
             Configured Agent instance
         """
-        # Use provided system prompt or default
         prompt = system_prompt or self.system_prompt
         
-        # Format prompt with parameters if provided
         if prompt and parameters and isinstance(prompt, str):
             prompt = prompt.format(**parameters)
         
@@ -338,7 +329,6 @@ class SimpleAgent(PydanticAIService[T]):
             AgentException: If agent execution fails
         """
         try:
-            # Create agent with parameters if provided
             agent = self.create_agent(parameters=parameters)
             result = await agent.run(prompt, deps=context, **kwargs)
             
@@ -387,7 +377,6 @@ class SimpleAgent(PydanticAIService[T]):
             AgentException: If agent execution fails
         """
         try:
-            # Create agent with parameters if provided
             agent = self.create_agent(parameters=parameters)
             async with agent.run_stream(prompt, deps=context, **kwargs) as response:
                 async for chunk in response.stream_text():
