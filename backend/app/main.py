@@ -12,11 +12,13 @@ from app.api import health
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Handle application startup and shutdown events."""
-    logger.info("Starting MoneyPilot application", extra={"version": app_settings.VERSION})
+    logger.info(
+        "Starting MoneyPilot application", extra={"version": app_settings.VERSION}
+    )
     logger.info("Configuration loaded", extra=app_settings.get_feature_summary())
-    
+
     yield
-    
+
     logger.info("Shutting down MoneyPilot application")
 
 
@@ -61,7 +63,7 @@ async def global_exception_handler(request, exc):
 
 if __name__ == "__main__":
     import uvicorn
-    
+
     uvicorn.run(
         "app.main:app",
         host="0.0.0.0",

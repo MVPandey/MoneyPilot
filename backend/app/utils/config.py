@@ -15,24 +15,27 @@ class Config(BaseSettings):
     VERSION: str = Field(default="0.1.0", description="Application version")
     DEBUG: bool = Field(default=False, description="Debug mode")
     LOG_LEVEL: str = Field(default="INFO", description="Logging level")
-    
+
     API_PREFIX: str = Field(default="/api/v1", description="API prefix")
     CORS_ORIGINS: list[str] = Field(
-        default=["http://localhost:3000"],
-        description="Allowed CORS origins"
+        default=["http://localhost:3000"], description="Allowed CORS origins"
     )
-    
+
     LLM_API_KEY: str | None = Field(default=None, description="LLM API key (optional)")
-    LLM_API_BASE_URL: str = Field(default="https://api.openai.com/v1", description="LLM API base URL")
+    LLM_API_BASE_URL: str = Field(
+        default="https://api.openai.com/v1", description="LLM API base URL"
+    )
     LLM_MODEL_NAME: str = Field(default="gpt-4", description="LLM model name")
     LLM_TIMEOUT_SECONDS: int = Field(default=600, description="LLM request timeout")
-    
+
     SECRET_KEY: str = Field(
         default="your-secret-key-here-please-change-in-production",
-        description="Secret key for JWT and other security features"
+        description="Secret key for JWT and other security features",
     )
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(default=30, description="Access token expiry time in minutes")
-    
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(
+        default=30, description="Access token expiry time in minutes"
+    )
+
     def get_feature_summary(self) -> dict:
         """Get summary of enabled features."""
         return {

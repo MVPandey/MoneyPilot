@@ -23,7 +23,9 @@ class InterceptHandler(logging.Handler):
             frame = frame.f_back
             depth += 1
 
-        logger.opt(depth=depth, exception=record.exc_info).log(level, record.getMessage())
+        logger.opt(depth=depth, exception=record.exc_info).log(
+            level, record.getMessage()
+        )
 
 
 def format_record(record: dict[str, Any]) -> str:
@@ -57,7 +59,9 @@ def format_record(record: dict[str, Any]) -> str:
 
                 safe_value = str(value).replace("{", "{{").replace("}", "}}")
 
-                extra_parts.append(f"<blue>{safe_key}</blue>=<yellow>{safe_value}</yellow>")
+                extra_parts.append(
+                    f"<blue>{safe_key}</blue>=<yellow>{safe_value}</yellow>"
+                )
 
             base += " | " + " ".join(extra_parts)
 
@@ -87,7 +91,9 @@ def format_record_json(record: dict[str, Any]) -> str:
         log_entry["exception"] = {
             "type": exc_info.type.__name__,
             "value": str(exc_info.value),
-            "traceback": exc_info.traceback.raw if hasattr(exc_info.traceback, "raw") else str(exc_info.traceback),
+            "traceback": exc_info.traceback.raw
+            if hasattr(exc_info.traceback, "raw")
+            else str(exc_info.traceback),
         }
 
     return json.dumps(log_entry, default=str) + "\n"

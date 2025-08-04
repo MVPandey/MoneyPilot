@@ -1,4 +1,5 @@
 """Test configuration module."""
+
 from unittest.mock import patch
 
 from app.utils.config import Config
@@ -10,7 +11,7 @@ class TestConfig:
     def test_default_config(self):
         """Test default configuration values."""
         config = Config()
-        
+
         assert config.APP_NAME == "MoneyPilot"
         assert config.VERSION == "0.1.0"
         assert config.DEBUG is False
@@ -24,7 +25,7 @@ class TestConfig:
         """Test feature summary generation."""
         config = Config()
         summary = config.get_feature_summary()
-        
+
         assert summary["app_name"] == "MoneyPilot"
         assert summary["version"] == "0.1.0"
         assert summary["debug"] is False
@@ -35,27 +36,30 @@ class TestConfig:
         """Test config with LLM API key."""
         config = Config(LLM_API_KEY="test-key")
         summary = config.get_feature_summary()
-        
+
         assert summary["llm_configured"] is True
 
     @patch.dict("os.environ", {"DEBUG": "true", "LOG_LEVEL": "DEBUG"})
     def test_config_from_env(self):
         """Test loading config from environment variables."""
         config = Config()
-        
+
         assert config.DEBUG is True
         assert config.LOG_LEVEL == "DEBUG"
 
-    @patch.dict("os.environ", {
-        "APP_NAME": "TestApp",
-        "VERSION": "2.0.0",
-        "API_PREFIX": "/api/v2",
-        "LLM_MODEL_NAME": "gpt-4-turbo"
-    })
+    @patch.dict(
+        "os.environ",
+        {
+            "APP_NAME": "TestApp",
+            "VERSION": "2.0.0",
+            "API_PREFIX": "/api/v2",
+            "LLM_MODEL_NAME": "gpt-4-turbo",
+        },
+    )
     def test_config_override_from_env(self):
         """Test overriding multiple config values from environment."""
         config = Config()
-        
+
         assert config.APP_NAME == "TestApp"
         assert config.VERSION == "2.0.0"
         assert config.API_PREFIX == "/api/v2"

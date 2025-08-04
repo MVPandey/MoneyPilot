@@ -327,7 +327,9 @@ class LLMService:
             },
         )
 
-        tool_results = await self.tool_executor.execute_tool_calls(tool_calls, execution_id=request_id)
+        tool_results = await self.tool_executor.execute_tool_calls(
+            tool_calls, execution_id=request_id
+        )
 
         message_dicts = [msg.model_dump() for msg in messages]
         message_dicts.append(initial_completion.choices[0].message.model_dump())
@@ -397,7 +399,9 @@ class LLMService:
                     "JSON response parsed successfully",
                     extra={
                         "request_id": request_id,
-                        "response_keys": list(parsed_response.keys()) if isinstance(parsed_response, dict) else None,
+                        "response_keys": list(parsed_response.keys())
+                        if isinstance(parsed_response, dict)
+                        else None,
                     },
                 )
                 return parsed_response
@@ -439,7 +443,9 @@ class LLMService:
         except json.JSONDecodeError:
             return clean_json_response(response_text)
 
-    def _process_tool_calls(self, tool_calls: list[ToolCall], request_id: str = None) -> list[dict[str, Any]]:
+    def _process_tool_calls(
+        self, tool_calls: list[ToolCall], request_id: str = None
+    ) -> list[dict[str, Any]]:
         """
         Process tool calls into format suitable for LLM.
 

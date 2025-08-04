@@ -1,4 +1,5 @@
 """Test main FastAPI application."""
+
 import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import MagicMock, patch
@@ -39,17 +40,16 @@ class TestMainApp:
         """Test lifespan context manager for startup/shutdown."""
         with patch("app.main.logger") as mock_logger:
             mock_app = MagicMock()
-            
+
             async with lifespan(mock_app):
                 mock_logger.info.assert_any_call(
                     "Starting MoneyPilot application",
-                    extra={"version": app_settings.VERSION}
+                    extra={"version": app_settings.VERSION},
                 )
                 mock_logger.info.assert_any_call(
-                    "Configuration loaded",
-                    extra=app_settings.get_feature_summary()
+                    "Configuration loaded", extra=app_settings.get_feature_summary()
                 )
-            
+
             mock_logger.info.assert_called_with("Shutting down MoneyPilot application")
 
     @pytest.mark.asyncio
@@ -58,20 +58,20 @@ class TestMainApp:
         from app.main import global_exception_handler
         from starlette.requests import Request
         from starlette.datastructures import URL
-        
+
         mock_request = MagicMock(spec=Request)
         mock_request.url = MagicMock(spec=URL)
         mock_request.url.path = "/test-path"
         mock_request.method = "GET"
-        
+
         with patch("app.main.logger") as mock_logger:
             test_exception = ValueError("Test error")
-            
+
             response = await global_exception_handler(mock_request, test_exception)
-            
+
             assert response.status_code == 500
             assert response.body == b'{"detail":"Internal server error"}'
-            
+
             mock_logger.error.assert_called_once_with(
                 "Unhandled exception",
                 extra={
@@ -86,7 +86,7 @@ class TestMainApp:
         """Test API prefix is correctly applied to routes."""
         response = client.get("/api/v1/health")
         assert response.status_code == 200
-        
+
         response = client.get("/health")
         assert response.status_code == 404
 
@@ -94,7 +94,7 @@ class TestMainApp:
         """Test OpenAPI schema is available."""
         response = client.get("/api/v1/openapi.json")
         assert response.status_code == 200
-        
+
         schema = response.json()
         assert schema["info"]["title"] == "MoneyPilot"
         assert schema["info"]["version"] == "0.1.0"

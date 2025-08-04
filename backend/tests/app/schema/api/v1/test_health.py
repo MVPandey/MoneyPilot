@@ -1,4 +1,5 @@
 """Test health check response schema."""
+
 from datetime import datetime, timezone
 
 import pytest
@@ -19,7 +20,7 @@ class TestHealthCheckResponse:
             timestamp=datetime.now(timezone.utc),
             debug=True,
         )
-        
+
         assert response.status == "healthy"
         assert response.app_name == "TestApp"
         assert response.version == "1.0.0"
@@ -36,7 +37,7 @@ class TestHealthCheckResponse:
             timestamp=timestamp,
             debug=False,
         )
-        
+
         dumped = response.model_dump()
         assert dumped["status"] == "healthy"
         assert dumped["app_name"] == "TestApp"
@@ -53,7 +54,7 @@ class TestHealthCheckResponse:
             timestamp=datetime.now(timezone.utc),
             debug=True,
         )
-        
+
         json_str = response.model_dump_json()
         assert isinstance(json_str, str)
         assert "healthy" in json_str
@@ -66,7 +67,7 @@ class TestHealthCheckResponse:
                 status="healthy",
                 app_name="TestApp",
             )
-        
+
         errors = exc_info.value.errors()
         assert len(errors) == 3
         missing_fields = {error["loc"][0] for error in errors}

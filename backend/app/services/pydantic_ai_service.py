@@ -47,7 +47,7 @@ class PydanticAIService(Generic[T]):
         # Each run creates a new agent instance
         result = await service.run("Analyze AAPL stock")
         print(result.ticker)  # Type-safe access
-        
+
         # Can also create agents directly for collaboration
         agent1 = service.create_agent()
         agent2 = service.create_agent(system_prompt="You are a risk analyst")
@@ -194,9 +194,7 @@ class PydanticAIService(Generic[T]):
         """
         try:
             agent = self.create_agent()
-            async with agent.run_stream(
-                prompt, deps=context, **kwargs
-            ) as response:
+            async with agent.run_stream(prompt, deps=context, **kwargs) as response:
                 async for chunk in response.stream_text():
                     yield chunk
 
@@ -296,10 +294,10 @@ class SimpleAgent(PydanticAIService[T]):
             Configured Agent instance
         """
         prompt = system_prompt or self.system_prompt
-        
+
         if prompt and parameters and isinstance(prompt, str):
             prompt = prompt.format(**parameters)
-        
+
         return super().create_agent(
             system_prompt=prompt,
             output_type=output_type,
@@ -331,7 +329,7 @@ class SimpleAgent(PydanticAIService[T]):
         try:
             agent = self.create_agent(parameters=parameters)
             result = await agent.run(prompt, deps=context, **kwargs)
-            
+
             logger.info(
                 "Agent execution completed",
                 extra={
@@ -340,9 +338,9 @@ class SimpleAgent(PydanticAIService[T]):
                     "has_parameters": parameters is not None,
                 },
             )
-            
+
             return result.data
-            
+
         except Exception as e:
             logger.error(
                 "Agent execution failed",
@@ -381,7 +379,7 @@ class SimpleAgent(PydanticAIService[T]):
             async with agent.run_stream(prompt, deps=context, **kwargs) as response:
                 async for chunk in response.stream_text():
                     yield chunk
-                    
+
         except Exception as e:
             logger.error(
                 "Agent streaming failed",

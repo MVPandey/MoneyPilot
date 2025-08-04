@@ -1,4 +1,5 @@
 """Test constants module."""
+
 from app.utils.constants import (
     DEFAULT_MAX_TOKENS,
     DEFAULT_MAX_RETRIES,

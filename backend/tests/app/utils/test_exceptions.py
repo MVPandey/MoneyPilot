@@ -1,4 +1,5 @@
 """Test custom exceptions."""
+
 import pytest
 
 from app.utils.exceptions import (
@@ -16,7 +17,7 @@ class TestExceptions:
         """Test LLMException."""
         with pytest.raises(LLMException) as exc_info:
             raise LLMException("Test LLM error")
-        
+
         assert str(exc_info.value) == "Test LLM error"
         assert isinstance(exc_info.value, Exception)
 
@@ -29,7 +30,7 @@ class TestExceptions:
         """Test ToolException."""
         with pytest.raises(ToolException) as exc_info:
             raise ToolException("Test tool error")
-        
+
         assert str(exc_info.value) == "Test tool error"
         assert isinstance(exc_info.value, Exception)
 
@@ -42,7 +43,7 @@ class TestExceptions:
         """Test WorkflowException."""
         with pytest.raises(WorkflowException) as exc_info:
             raise WorkflowException("Test workflow error")
-        
+
         assert str(exc_info.value) == "Test workflow error"
         assert isinstance(exc_info.value, Exception)
 
@@ -55,7 +56,7 @@ class TestExceptions:
         """Test AgentException."""
         with pytest.raises(AgentException) as exc_info:
             raise AgentException("Test agent error")
-        
+
         assert str(exc_info.value) == "Test agent error"
         assert isinstance(exc_info.value, Exception)
 
@@ -70,7 +71,7 @@ class TestExceptions:
         tool_exc = ToolException("tool")
         workflow_exc = WorkflowException("workflow")
         agent_exc = AgentException("agent")
-        
+
         assert type(llm_exc) is not type(tool_exc)
         assert type(llm_exc) is not type(workflow_exc)
         assert type(llm_exc) is not type(agent_exc)
@@ -81,11 +82,11 @@ class TestExceptions:
     def test_exception_with_cause(self):
         """Test raising exception with cause."""
         original_error = ValueError("Original error")
-        
+
         with pytest.raises(LLMException) as exc_info:
             try:
                 raise original_error
             except ValueError as e:
                 raise LLMException("Wrapped error") from e
-        
+
         assert exc_info.value.__cause__ == original_error
