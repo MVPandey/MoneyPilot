@@ -37,6 +37,8 @@ next-env.d.ts
 # python
 __pycache__/
 .venv
+.ruff_cache/
+*.log
 
 # ai tools
 .claude/
